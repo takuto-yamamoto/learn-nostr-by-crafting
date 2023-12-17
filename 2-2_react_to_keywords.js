@@ -1,15 +1,11 @@
-const { currUnixtime, getCliArg } = require("./utils.js");
-const {
-  relayInit,
-  getPublicKey,
-  finishEvent
-} = require("nostr-tools");
-require("websocket-polyfill");
+const { currUnixTime, getCliArg } = require('./utils.js');
+const { relayInit, getPublicKey, finishEvent } = require('nostr-tools');
+require('websocket-polyfill');
 
 /* Bot用の秘密鍵をここに設定 */
-const BOT_PRIVATE_KEY_HEX = ???;
+const BOT_PRIVATE_KEY_HEX = '';
 
-const relayUrl = "wss://relay-jp.nostr.wirednet.jp";
+const relayUrl = 'wss://relay-jp.nostr.wirednet.jp';
 
 /**
  * リアクションイベントを組み立てる
@@ -18,10 +14,10 @@ const relayUrl = "wss://relay-jp.nostr.wirednet.jp";
 const composeReaction = (targetEvent) => {
   /* Q-1: リアクションイベントのフィールドを埋めよう  */
   const ev = {
-    kind: ???,
-    content: ???,
-    tags: ???,
-    created_at: currUnixtime(),
+    kind: 7,
+    content: '+',
+    tags: [['e', targetEvent, '']],
+    created_at: currUnixTime(),
   };
 
   // イベントID(ハッシュ値)計算・署名
@@ -31,30 +27,30 @@ const composeReaction = (targetEvent) => {
 // リレーにイベントを送信
 const publishToRelay = (relay, ev) => {
   const pub = relay.publish(ev);
-  pub.on("ok", () => {
-    console.log("succeess!");
+  pub.on('ok', () => {
+    console.log('success!');
   });
-  pub.on("failed", () => {
-    console.log("failed to send event");
+  pub.on('failed', () => {
+    console.log('failed to send event');
   });
 };
 
 const main = async (targetWord) => {
   const relay = relayInit(relayUrl);
-  relay.on("error", () => {
-    console.error("failed to connect");
+  relay.on('error', () => {
+    console.error('failed to connect');
   });
 
   await relay.connect();
 
   /* Q-2: すべてのテキスト投稿を購読しよう */
-  const sub = ???;
-  sub.on("event", (ev) => {
+  const sub = relay.sub([{ kinds: [1] }]);
+  sub.on('event', (ev) => {
     try {
       /* Q-3: 「受信した投稿のcontentに対象の単語が含まれていたら、
               その投稿イベントにリアクションする」ロジックを完成させよう */
       // ヒント: ある文字列に指定の単語が含まれているかを判定するには、includes()メソッドを使うとよいでしょう
-      ???;
+      if (ev.content.includes(targetWord));
     } catch (err) {
       console.error(err);
     }
@@ -62,5 +58,7 @@ const main = async (targetWord) => {
 };
 
 // コマンドライン引数をリアクション対象の単語とする
-const targetWord = getCliArg("error: リアクション対象の単語をコマンドライン引数として設定してください");
+const targetWord = getCliArg(
+  'error: リアクション対象の単語をコマンドライン引数として設定してください'
+);
 main(targetWord).catch((e) => console.error(e));

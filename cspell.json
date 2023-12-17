@@ -1,5 +1,10 @@
 {
   "version": "0.2",
   "language": "en",
-  "words": ["nostr", "wirednet", "EOSE"]
+  "words": [
+    "EOSE",
+    "hiruno",
+    "nostr",
+    "wirednet"
+  ]
 }
