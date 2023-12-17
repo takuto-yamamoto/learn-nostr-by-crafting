@@ -1,5 +1,5 @@
-// 現在のunixtime(秒単位)を取得
-const currUnixtime = () => Math.floor(new Date().getTime() / 1000);
+// 現在のunixTime(秒単位)を取得
+const currUnixTime = () => Math.floor(new Date().getTime() / 1000);
 
 // 1番目のコマンドライン引数を取得
 const getCliArg = (errMsg) => {
@@ -11,6 +11,6 @@ const getCliArg = (errMsg) => {
 };
 
 module.exports = {
-  currUnixtime,
+  currUnixTime,
   getCliArg,
 };

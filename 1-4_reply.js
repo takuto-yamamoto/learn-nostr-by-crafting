@@ -1,17 +1,16 @@
-const { currUnixtime, getCliArg } = require("./utils.js");
+const { currUnixTime, getCliArg } = require('./utils.js');
 const {
   relayInit,
   getPublicKey,
   getEventHash,
   getSignature,
-  nip19
-} = require("nostr-tools");
-require("websocket-polyfill");
+} = require('nostr-tools');
+require('websocket-polyfill');
 
 /* 自分の秘密鍵をhex形式に変換して、ここに設定*/
-const PRIVATE_KEY_HEX = ???;
+const PRIVATE_KEY_HEX = '';
 
-const relayUrl = "wss://relay-jp.nostr.wirednet.jp";
+const relayUrl = 'wss://relay-jp.nostr.wirednet.jp';
 
 /**
  * テキスト投稿イベント(リプライ)を組み立てる
@@ -30,11 +29,11 @@ const composeReplyPost = (content, targetPubkey, targetEventId) => {
     content,
     tags: [
       /* Q-1: リプライ対象の公開鍵を指すpタグを書いてみよう */
-      [???],
+      ['p', targetPubkey, ''],
       /* Q-2: リプライ対象の投稿を指すeタグを書いてみよう */
-      [???],
+      ['e', targetEventId, ''],
     ],
-    created_at: currUnixtime(),
+    created_at: currUnixTime(),
   };
   const id = getEventHash(ev);
   const sig = getSignature(ev, PRIVATE_KEY_HEX);
@@ -44,8 +43,8 @@ const composeReplyPost = (content, targetPubkey, targetEventId) => {
 
 const main = async (content) => {
   const relay = relayInit(relayUrl);
-  relay.on("error", () => {
-    console.error("failed to connect");
+  relay.on('error', () => {
+    console.error('failed to connect');
   });
 
   await relay.connect();
@@ -56,20 +55,22 @@ const main = async (content) => {
     // ヒント-1: まずは、1-3節の演習で作った投稿にリプライしてみるといいでしょう。必要な2つのデータはログに出力されたイベントの中にあります
     // ヒント-2: 「リプライ実装チェッカー(bot)」の投稿にリプライすると、実装が正しいか判定してリプライで結果を教えてくれます。詳しくはREADMEの「ヒント」の項を参照してください
     // ヒント-3: npmスクリプト sub-reply を使って自分へのリプライを確認できます。詳しくはREADMEの「npmスクリプト」の項を参照してください
-    "???(リプライ対象の公開鍵)",
-    "???(リプライ対象の投稿のイベントID)"
+    '3428c9e36ec50e2e4e3cd54a01e27252cd47fb60ae318440b64dc4dce568ff64',
+    'bc6c91a7c2ef398d7e9d6ede106e204024a6409c129e0bb7286da092386c2554'
   );
   const pub = relay.publish(replyPost);
 
-  pub.on("ok", () => {
-    console.log("succeess!");
+  pub.on('ok', () => {
+    console.log('success!');
     relay.close();
   });
-  pub.on("failed", () => {
-    console.log("failed to send event");
+  pub.on('failed', () => {
+    console.log('failed to send event');
     relay.close();
   });
 };
 
-const content = getCliArg("error: リプライの内容をコマンドライン引数として設定してください");
+const content = getCliArg(
+  'error: リプライの内容をコマンドライン引数として設定してください'
+);
 main(content).catch((e) => console.error(e));
