@@ -16,7 +16,7 @@ const composeReaction = (targetEvent) => {
   const ev = {
     kind: 7,
     content: '+',
-    tags: [['e', targetEvent, '']],
+    tags: [['e', targetEvent.id, '']],
     created_at: currUnixTime(),
   };
 
@@ -50,7 +50,10 @@ const main = async (targetWord) => {
       /* Q-3: 「受信した投稿のcontentに対象の単語が含まれていたら、
               その投稿イベントにリアクションする」ロジックを完成させよう */
       // ヒント: ある文字列に指定の単語が含まれているかを判定するには、includes()メソッドを使うとよいでしょう
-      if (ev.content.includes(targetWord));
+      if (ev.content.includes(targetWord)) {
+        const reaction = composeReaction(ev);
+        publishToRelay(relay, reaction);
+      }
     } catch (err) {
       console.error(err);
     }

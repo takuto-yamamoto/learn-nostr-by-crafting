@@ -3,7 +3,8 @@ const { relayInit, getPublicKey, finishEvent, nip19 } = require('nostr-tools');
 require('websocket-polyfill');
 
 /* Q-1: Bot用に新しい秘密鍵を生成して、ここに設定しよう */
-const BOT_PRIVATE_KEY_HEX = '';
+const BOT_PRIVATE_KEY_HEX =
+  '996a4e00e8c238c63012244f1841a84b32d07c541c9267aeff11b1e2cd4efe84';
 
 const relayUrl = 'wss://relay-jp.nostr.wirednet.jp';
 
@@ -15,7 +16,7 @@ const composeMetadata = () => {
   const profile = {
     name: 'fav_no_tarte', // スクリーンネーム
     display_name: 'ふぁぼのたると', // 表示名
-    about: '@hiruno_tarte のかわりにいいねするよ！！！', // 説明欄(bio)
+    about: '@hiruno_tarte のかわりにふぁぼするよ！！！', // 説明欄(bio)
   };
 
   /* Q-3: メタデータ(プロフィール)イベントのフィールドを埋めよう */
