@@ -51,8 +51,7 @@ const main = async (targetWord) => {
               その投稿イベントにリアクションする」ロジックを完成させよう */
       // ヒント: ある文字列に指定の単語が含まれているかを判定するには、includes()メソッドを使うとよいでしょう
       if (ev.content.includes(targetWord)) {
-        const reaction = composeReaction(ev);
-        publishToRelay(relay, reaction);
+        publishToRelay(relay, composeReaction(ev));
       }
     } catch (err) {
       console.error(err);
